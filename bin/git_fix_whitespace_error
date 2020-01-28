@@ -1,0 +1,12 @@
+#!/usr/local/bin/bash
+
+git diff-index --check --text HEAD '*.ts' '*.html' '*.json' '*.xml'     |\
+sed '/^[+-]/d'                                                          |\
+cut -d: -f1                                                             |\
+sort | uniq                                                             |\
+while read _FILE
+do
+	echo "Fix: $_FILE"
+	sed -i '' 's/[ 	]*$//' "$_FILE"
+	sed -i '' 's/ +	/	/' "$_FILE"
+done

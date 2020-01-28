@@ -1,0 +1,13 @@
+#!/usr/local/bin/bash
+
+HERE=$PWD
+
+ls -1d *			|\
+while read _DIR
+do 
+	echo "${_DIR}"
+
+	cd "${HERE}/${_DIR}"
+
+	git status -s
+done

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+COMMENT="${1:-changes}"
+
+git add -A && git commit -m "change: $COMMENT" && git push
