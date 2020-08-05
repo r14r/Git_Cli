@@ -1,8 +1,32 @@
 #!/bin/bash
+
+
 GITHUB_ACCOUNT="$1"
 
-FLDR_DST=/Users/Shared/CLOUD/Development.GitHub/ssh/keys
+HOST="$(uname -n)"
+if [ $HOST == "NB-RALPH" ]; then
+	FLDR_DST=/Users/Shared/CLOUD/Development.GitHub/ssh/keys.nb-ralph
+else
+	FLDR_DST=/Users/Shared/CLOUD/Development.GitHub/ssh/keys
+fi
 
-echo ssh-keygen -t rsa -C "${GITHUB_ACCOUNT}@via-internet.de" -f ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}
-echo "cd $HOME/.ssh && ln -s ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}* ."
-echo "cat ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}.pub"
+echo "#. Remove old ssh files"
+rm -f ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}*
+
+echo "#. Create ssh files"
+ssh-keygen -t rsa -C "${GITHUB_ACCOUNT}@via-internet.de" -f ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT} -N pAssw8rd
+
+if [ $HOST == "NB-RALPH" ]; then
+	echo "#. Change file permissions of ssh files"
+	chmod u+w $HOME/.ssh/id_rsa_${GITHUB_ACCOUNT}*
+
+	echo "#. Copy ssh files"
+	cp        ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}* $HOME/.ssh
+
+	chmod 400 ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}*
+else
+	echo "#. Link ssh files"
+	cd $HOME/.ssh && ln -s ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}
+fi
+
+cat ${FLDR_DST}/id_rsa_${GITHUB_ACCOUNT}.pub

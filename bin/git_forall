@@ -8,7 +8,7 @@ else
 	CMD="status}"
 fi
 
-find . -name .git -type d -maxdepth 2	|\
+find . -maxdepth 2  -name .git -type d |\
 while read _DIR
 do 
 	_DIR="$(dirname "$_DIR")"
