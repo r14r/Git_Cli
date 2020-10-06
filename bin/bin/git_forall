@@ -1,0 +1,20 @@
+#!/usr/local/bin/bash
+
+HERE=$PWD
+
+if [[ -n "$1" ]]; then
+	CMD="$*"
+else
+	CMD="status}"
+fi
+
+find . -name .git -type d -maxdepth 2	|\
+while read _DIR
+do 
+	_DIR="$(dirname "$_DIR")"
+	echo "${_DIR}"
+
+	cd "${HERE}/${_DIR}"
+
+	git $CMD
+done

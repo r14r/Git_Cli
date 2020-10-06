@@ -1,0 +1,10 @@
+#!/bin/bash
+
+REPO=$1
+
+REP=$(basename $REPO .git)
+USR=$(basename $(dirname $REPO) )
+
+set -x
+git clone $REPO ${REP}_${USR}
+set +x
